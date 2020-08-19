@@ -12,8 +12,8 @@ public class MainRouteBuilder extends RouteBuilder {
 
     public void configure() {
 
-        from("amqp:queue:myHelloMessages").process((e) -> {
+        /*from("amqp:topic:myHelloMessages").process((e) -> {
             System.out.println("received: " + (String)e.getIn().getBody());
-        });
+        });*/
     }
 }

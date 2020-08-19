@@ -25,7 +25,7 @@ public class MessageProducer {
     public void sendMessage(){
         String message = "hello! " + new Random().nextInt();
         System.out.println("sending: " + message);
-        this.producerTemplate.sendBody("amqp:queue:myHelloMessages", message);
+        this.producerTemplate.sendBody("amqp:topic:myTopicMessages", message);
     }
 
 }

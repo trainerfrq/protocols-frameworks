@@ -1,5 +1,8 @@
 package com.training.protocols.websocket;
 
+import com.training.parser.UnitSyntaxParser;
+import com.training.service.ConverterController;
+import com.training.service.UnitConverter;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.ProducerTemplate;
@@ -27,6 +30,17 @@ public class WebsocketMessageProcessor implements Processor {
                 case "message":
                     LOGGER.info("received message: " + parts[1]);
                     break;
+                case "convert":
+                    ConverterController converterController = new ConverterController(
+                            new UnitSyntaxParser(),
+                            new UnitConverter()
+                    );
+                    sendConvertedStuff(
+                            exchange,
+                            connectionKey,
+                            converterController.convertFromString(parts[1])
+                    );
+                    break;
                 default:  LOGGER.warn("unknown command!");
             }
         } else {
@@ -40,6 +54,15 @@ public class WebsocketMessageProcessor implements Processor {
         producerTemplate.sendBodyAndHeader(
                 "atmosphere-websocket:///hello",
                 "heartbeat|" + System.currentTimeMillis(),
+                WebsocketConstants.CONNECTION_KEY, connectionKey
+        );
+    }
+
+    private void sendConvertedStuff(Exchange exchange, String connectionKey, String convertedStuff) {
+        ProducerTemplate producerTemplate = exchange.getContext().createProducerTemplate();
+        producerTemplate.sendBodyAndHeader(
+                "atmosphere-websocket:///hello",
+                "convertedStuff|" + convertedStuff,
                 WebsocketConstants.CONNECTION_KEY, connectionKey
         );
     }

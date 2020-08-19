@@ -24,7 +24,7 @@ public class MainRouteBuilder extends RouteBuilder {
 
         from("atmosphere-websocket:///hello").choice().
                 when(header(WebsocketConstants.EVENT_TYPE).isEqualTo(WebsocketConstants.ONOPEN_EVENT_TYPE)).
-                process(websocketSessionProcessor).to("atmosphere-websocket:///swx").
+                process(websocketSessionProcessor).to("atmosphere-websocket:///hello").
                 when(header(WebsocketConstants.EVENT_TYPE).isEqualTo(WebsocketConstants.ONCLOSE_EVENT_TYPE)).
                 process(websocketSessionProcessor).
                 when(header(WebsocketConstants.EVENT_TYPE).isEqualTo(WebsocketConstants.ONERROR_EVENT_TYPE)).
